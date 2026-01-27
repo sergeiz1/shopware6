@@ -2181,7 +2181,7 @@ return [
 	'dependencies' => array (
   '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Command/ProductTypeSyncCommand.php' => 
   array (
-    'fileHash' => 'ea644438c2aa8a3b2055a6e4dadee4f9cba227ed',
+    'fileHash' => '805ebe2af0f0b55aaa32ed67447929f65a5dc42a',
     'dependentFiles' => 
     array (
     ),
@@ -2228,7 +2228,7 @@ return [
   ),
   '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Elasticsearch/Product/ElasticsearchProductDefinitionDecorator.php' => 
   array (
-    'fileHash' => 'b9a4d9a8f00efb1fe822281f12aae208b50068a3',
+    'fileHash' => '0763c7cae7f7b9f798a7774707fd19827983e1c1',
     'dependentFiles' => 
     array (
     ),
@@ -2249,21 +2249,21 @@ return [
   ),
   '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Subscriber/ProductTypeCustomSearchKeywordsSubscriber.php' => 
   array (
-    'fileHash' => 'dcb6a0ee953a65c52e95451b61538323f5423090',
+    'fileHash' => '3bb0248badca3ab2f3d95ea3f56a83e51125c73b',
     'dependentFiles' => 
     array (
     ),
   ),
   '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Subscriber/ProductTypeListingFilterSubscriber.php' => 
   array (
-    'fileHash' => '0fc687f05e94049604775ba7bfe3a08b08de9093',
+    'fileHash' => 'd70558ae96a21b7a77bdbf2ee4c8c09ed0f81d05',
     'dependentFiles' => 
     array (
     ),
   ),
   '/var/www/html/custom/plugins/WbmProductTypeFilter/src/WbmProductTypeFilter.php' => 
   array (
-    'fileHash' => '292941137409f06a7ceff0c1cb66ce3b291dde26',
+    'fileHash' => 'c1a41dd045a426336c739c1959de96c8a61d9347',
     'dependentFiles' => 
     array (
     ),

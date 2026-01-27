@@ -12,6 +12,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
 {
+    private const FIELD_PRODUCT_TYPE = 'wbmProductType';
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -24,7 +26,7 @@ class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
         $filters = $event->getFilters();
         $request = $event->getRequest();
 
-        $selectedTypes = $event->getRequest()->get('wbmProductType', []);
+        $selectedTypes = $event->getRequest()->get(self::FIELD_PRODUCT_TYPE, []);
         if (!is_array($selectedTypes)) {
             $selectedTypes = [$selectedTypes];
         }
@@ -33,12 +35,13 @@ class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
         $isFiltered = \count($selectedTypes) > 0;
 
         $filter = new Filter(
-            'wbmProductType',
+            self::FIELD_PRODUCT_TYPE,
             $isFiltered,
-            [new TermsAggregation('wbmProductType', 'wbmProductType')],
-            new EqualsAnyFilter('wbmProductType', $selectedTypes),
+            [new TermsAggregation(self::FIELD_PRODUCT_TYPE, self::FIELD_PRODUCT_TYPE)],
+            new EqualsAnyFilter(self::FIELD_PRODUCT_TYPE, $selectedTypes),
             $selectedTypes
         );
+
         $filters->add($filter);
     }
 }

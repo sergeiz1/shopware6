@@ -145,9 +145,9 @@ ddev exec bin/console es:admin:index
 
 ---
 
-## Qualitäts-Gates / Best Practices
+## QA
 
-Im Plugin sind Quality-Gates vorgesehen:
+Im Plugin sind QA vorgesehen:
 
 - PHP-CS-Fixer (Code Style)
 - PHPStan (Static Analysis)

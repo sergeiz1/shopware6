@@ -7,7 +7,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
   array (
     '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Elasticsearch/Product/ElasticsearchProductDefinitionDecorator.php' => 
     array (
-      0 => 'b9a4d9a8f00efb1fe822281f12aae208b50068a3',
+      0 => '0763c7cae7f7b9f798a7774707fd19827983e1c1',
       1 => 
       array (
         0 => 'wbm\\producttypefilter\\elasticsearch\\product\\elasticsearchproductdefinitiondecorator',
@@ -28,7 +28,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/var/www/html/custom/plugins/WbmProductTypeFilter/src/WbmProductTypeFilter.php' => 
     array (
-      0 => '292941137409f06a7ceff0c1cb66ce3b291dde26',
+      0 => 'c1a41dd045a426336c739c1959de96c8a61d9347',
       1 => 
       array (
         0 => 'wbm\\producttypefilter\\wbmproducttypefilter',
@@ -64,7 +64,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Subscriber/ProductTypeCustomSearchKeywordsSubscriber.php' => 
     array (
-      0 => 'dcb6a0ee953a65c52e95451b61538323f5423090',
+      0 => '3bb0248badca3ab2f3d95ea3f56a83e51125c73b',
       1 => 
       array (
         0 => 'wbm\\producttypefilter\\subscriber\\producttypecustomsearchkeywordssubscriber',
@@ -84,7 +84,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Subscriber/ProductTypeListingFilterSubscriber.php' => 
     array (
-      0 => '0fc687f05e94049604775ba7bfe3a08b08de9093',
+      0 => 'd70558ae96a21b7a77bdbf2ee4c8c09ed0f81d05',
       1 => 
       array (
         0 => 'wbm\\producttypefilter\\subscriber\\producttypelistingfiltersubscriber',
@@ -119,7 +119,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/var/www/html/custom/plugins/WbmProductTypeFilter/src/Command/ProductTypeSyncCommand.php' => 
     array (
-      0 => 'ea644438c2aa8a3b2055a6e4dadee4f9cba227ed',
+      0 => '805ebe2af0f0b55aaa32ed67447929f65a5dc42a',
       1 => 
       array (
         0 => 'wbm\\producttypefilter\\command\\producttypesynccommand',
