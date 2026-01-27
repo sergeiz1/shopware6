@@ -1,0 +1,6 @@
+@import '~scss/variables';
+
+.sw-product-detail-specification__custom-type {
+    grid-template-columns: 1fr 1fr;
+    gap: 0 30px;
+}

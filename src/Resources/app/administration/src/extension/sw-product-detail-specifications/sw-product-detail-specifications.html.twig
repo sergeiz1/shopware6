@@ -1,0 +1,20 @@
+{% block sw_product_detail_specifications %}
+    {% parent() %}
+
+    <mt-card :title="$tc('sw-product.detail.customTypesTitle')" position-identifier="wbm-product-type-extension">
+        <sw-container class="sw-product-detail-specification__custom-type">
+
+            <sw-number-field
+                :label="$tc('sw-product.detail.productIdFromApi')"
+                :value="wbmExtension?.productIdFromApi"
+                disabled
+            />
+
+            <sw-text-field
+                :label="$tc('sw-product.detail.productType')"
+                v-model="wbmExtension.productType"
+            />
+
+        </sw-container>
+    </mt-card>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
+
+{% block component_filter_panel_items %}
+    {{ parent() }}
+
+    {% set productTypesAgg = listing.aggregations.get('wbmProductType') %}
+    {% set productTypeOptions = [] %}
+
+    {% for b in productTypesAgg.buckets %}
+        {% set key = b.key|default('')|trim %}
+        
+        {% if key %}
+            {% set productTypeOptions = productTypeOptions|merge([{
+                id: key,
+                name: key,
+                translated: { name: key|capitalize },
+                count: b.count|default(0)
+            }]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if productTypesAgg and productTypesAgg.buckets|length > 0 %}
+        <div class="filter-wrapper">
+            {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
+                name: 'wbmProductType',
+                displayName: 'sw-product.filter.label'|trans|sw_sanitize,
+                elements: productTypeOptions
+            } %}
+        </div>
+    {% endif %}
+{% endblock %}

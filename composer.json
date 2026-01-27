@@ -1,0 +1,57 @@
+{
+    "name": "wbm/product-type-filter",
+    "description": "wbm/product-type-filter",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergei Zaverjuhha"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "shopware/core": "~6.7.0",
+        "shopware/storefront": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.60",
+        "phpstan/phpstan": "^1.11"
+    },
+    "scripts": {
+        "lint:twig:storefront": "php ../../../bin/console lint:twig src/Resources/views",
+        "lint:cs": "php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "fix:cs": "php -d memory_limit=-1 vendor/bin/php-cs-fixer fix",
+        "lint:stan": "php -d memory_limit=-1 vendor/bin/phpstan analyse",
+        "lint": [
+            "@lint:cs",
+            "@lint:stan"
+        ],
+        "qa": [
+            "@lint",
+            "@lint:twig:storefront"
+        ]
+    },
+    "extra": {
+        "shopware-plugin-class": "Wbm\\ProductTypeFilter\\WbmProductTypeFilter",
+        "label": {
+            "de-DE": "Wbm Produkttyp Filter",
+            "en-GB": "Wbm Product Type Filter"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Wbm\\ProductTypeFilter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wbm\\ProductTypeFilter\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    }
+}

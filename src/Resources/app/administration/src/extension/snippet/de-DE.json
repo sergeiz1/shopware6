@@ -1,0 +1,16 @@
+{
+    "sw-product": {
+        "list": {
+            "columnProductType": "Produkttyp"
+        },
+        "filter": {
+            "placeholder": "Wähle einen Produkttypen",
+            "productType": "Produkttyp"
+        },
+        "detail": {
+            "customTypesTitle": "Neue Produkttypen",
+            "productIdFromApi": "Produkt ID aus Schnittstelle",
+            "productType": "Produkttyp"
+        }
+    }
+}

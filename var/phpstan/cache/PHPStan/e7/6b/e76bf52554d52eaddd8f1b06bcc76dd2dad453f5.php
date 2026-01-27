@@ -1,0 +1,7 @@
+<?php declare(strict_types = 1);
+
+// variadic-method-Wbm\ProductTypeFilter\Command\ProductTypeSyncCommand-parsePositiveInt-/var/www/html/custom/plugins/WbmProductTypeFilter/src/Command/ProductTypeSyncCommand.php
+return \PHPStan\Cache\CacheItem::__set_state(array(
+   'variableKey' => '1769547292-v4',
+   'data' => false,
+));
