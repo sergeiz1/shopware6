@@ -15,12 +15,13 @@ Shopware.Component.override('sw-product-list', {
     },
 
     computed: {
-        defaultFilters() {
-            const defaults = this.$super('defaultFilters');
+        listFilters() {
+            const filters = this.$super('listFilters');
 
-            return defaults.includes('wbm-product-type-filter')
-                ? defaults
-                : [...defaults, 'wbm-product-type-filter'];
+            return [
+                ...filters,
+                'wbm-product-type-filter',
+            ];
         },
 
         listFilterOptions() {
@@ -43,6 +44,10 @@ Shopware.Component.override('sw-product-list', {
     },
 
     created() {
+         if (Array.isArray(this.defaultFilters) && !this.defaultFilters.includes('wbm-product-type-filter')) {
+            this.defaultFilters.push('wbm-product-type-filter');
+        }
+
         this.productTypeExtensionRepository = this.repositoryFactory.create('wbm_product_type_extension');
         this.wbmLoadProductTypes();
     },
@@ -68,15 +73,6 @@ Shopware.Component.override('sw-product-list', {
         getListCriteria() {
             const criteria = this.$super('getListCriteria');
             criteria.addAssociation('wbmProductTypeExtension');
-
-            if (this.wbmSelectedProductTypes.length > 0) {
-                criteria.addFilter(
-                    Criteria.equalsAny(
-                        'wbmProductTypeExtension.productType',
-                        this.wbmSelectedProductTypes
-                    )
-                );
-            }
 
             return criteria;
         },
