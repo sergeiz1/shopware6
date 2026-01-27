@@ -6,7 +6,7 @@ Shopware.Component.override('sw-product-list', {
     inject: ['repositoryFactory', 'filterFactory'],
     template,
 
-    data: function () {
+    data() {
         return {
             productTypeExtensionRepository: null,
             wbmProductTypeOptions: [],
@@ -96,16 +96,6 @@ Shopware.Component.override('sw-product-list', {
             } catch (e) {
                 console.error('WbmProductTypeFilter: loadProductTypes failed', e);
                 this.wbmProductTypeOptions = [];
-            }
-        },
-
-        wbmOnProductTypeFilterChange(values) {
-            this.wbmSelectedProductTypes = Array.isArray(values) ? values : [];
-
-            if (typeof this.getList === 'function') {
-                this.getList();
-            } else if (typeof this.refreshList === 'function') {
-                this.refreshList();
             }
         },
     },
