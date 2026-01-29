@@ -103,7 +103,7 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
                 if (is_array($keywords)) {
                     $list = array_values(array_filter(array_map('trim', $keywords), static fn ($v) => $v !== ''));
 
-                    // Optional: case-insensitive dupe protection
+                    // Case-insensitive dupe protection
                     $lower = array_map(static fn (string $v) => mb_strtolower($v), $list);
                     if (!in_array(mb_strtolower($type), $lower, true)) {
                         $list[] = $type;
@@ -131,7 +131,7 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
             return $query;
         }
 
-        // Note: TermQuery on keyword field is exact match (case-sensitive depending on mapping/normalizer).
+        // TermQuery on keyword field is exact match (case-sensitive depending on mapping/normalizer).
         if ($query instanceof BoolQuery) {
             $query->add(new TermQuery(self::ES_FIELD_PRODUCT_TYPE, $term), BoolQuery::SHOULD);
         }

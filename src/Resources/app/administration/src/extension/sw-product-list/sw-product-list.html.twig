@@ -7,25 +7,5 @@
 {% endblock %}
 
 {% block sw_product_list_sidebar %}
-    <template #sidebar>
-        <sw-sidebar>
-
-            {% block sw_product_list_sidebar_refresh %}
-                <sw-sidebar-item
-                    icon="regular-undo"
-                    :title="$tc('sw-product.list.titleSidebarItemRefresh')"
-                    @click="onRefresh"
-                />
-            {% endblock %}
-
-            <sw-sidebar-filter-panel
-                entity="product"
-                :store-key="storeKey"
-                :active-filter-number="activeFilterNumber"
-                :filters="listFilters"
-                :defaults="defaultFilters"
-                @criteria-changed="updateCriteria"
-            />
-        </sw-sidebar>
-    </template>
+    {% parent %}
 {% endblock %}

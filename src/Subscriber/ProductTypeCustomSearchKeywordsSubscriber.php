@@ -48,7 +48,6 @@ final class ProductTypeCustomSearchKeywordsSubscriber implements EventSubscriber
             return;
         }
 
-        // 1) Load product_type for LIVE_VERSION only (align with migration)
         $liveVersionBytes = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
 
         $extensionRows = $this->connection->fetchAllAssociative(
@@ -82,7 +81,6 @@ final class ProductTypeCustomSearchKeywordsSubscriber implements EventSubscriber
             return;
         }
 
-        // 2) Load translations including current custom_search_keywords so we can merge
         $translationRows = $this->connection->fetchAllAssociative(
             'SELECT LOWER(HEX(product_id)) AS product_id_hex, language_id, custom_search_keywords
              FROM product_translation

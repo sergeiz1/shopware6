@@ -74,7 +74,6 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
 
         $buffer = trim($output->fetch());
         if ($buffer !== '') {
-            // avoid log spam
             $snippet = mb_substr($buffer, 0, 4000);
             $this->logger->info(sprintf('[WBM] Output %s: %s', $commandName, $snippet));
         }

@@ -135,6 +135,20 @@ ddev exec bin/console plugin:refresh
 ddev exec bin/console plugin:install WbmProductTypeFilter --activate --clearCache
 ```
 
+Damit `es:index` und `es:admin:index` funktionieren, sollten in der `.env.local` folgende Variablen gesetzt sein:
+
+```dotenv
+OPENSEARCH_URL=opensearch:9200
+SHOPWARE_ES_INDEXING_ENABLED=1
+SHOPWARE_ES_ENABLED=1
+SHOPWARE_ES_INDEX_PREFIX=wbm-
+SHOPWARE_ES_THROW_EXCEPTION=1
+ADMIN_OPENSEARCH_URL=opensearch:9200
+SHOPWARE_ADMIN_ES_ENABLED=1
+SHOPWARE_ADMIN_ES_REFRESH_INDICES=1
+SHOPWARE_ADMIN_ES_INDEX_PREFIX=wbm-admin-
+```
+
 Reindex (wenn notwendig)
 
 ```bash
