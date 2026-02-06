@@ -1,4 +1,5 @@
 /composer.lock
+/src/Command/
 /src/Resources/app/administration/node_modules/
 /src/Resources/app/administration/src/.vite
 /src/Resources/public/

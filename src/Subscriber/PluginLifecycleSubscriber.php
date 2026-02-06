@@ -21,7 +21,8 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly ProductTypeKeywordsSyncSubscriber $syncSubscriber
     ) {
     }
 
@@ -39,6 +40,13 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
         $eventClass = $event !== null ? $event::class : 'unknown';
         $this->logger->info(sprintf('[WBM] Reindex triggered (plugin lifecycle, event=%s).', $eventClass));
 
+        $isHard = $event instanceof PluginPostInstallEvent || $event instanceof PluginPostActivateEvent;
+
+        if ($isHard) {
+            $this->syncSubscriber->syncAll();
+        }
+
+        $this->runCommand('cache:clear', ['--no-interaction' => true]);
         $this->runCommand('dal:refresh:index', ['--no-interaction' => true]);
         $this->runCommand('es:index', ['--no-interaction' => true]);
         $this->runCommand('es:admin:index', ['--no-interaction' => true]);

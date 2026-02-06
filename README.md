@@ -58,6 +58,8 @@ Wenn der Admin in der Suche z. B. „Bücher“ eingibt, sollen Produkte mit `pr
 **Entscheidung:**  
 `productType` wird beim ES/OS Index-Build zusätzlich in `customSearchKeywords` angereichert (Index-optimiert), damit die bestehende Suchlogik der Produktliste den Wert zuverlässig berücksichtigt.
 
+Umsetzungshinweis: Die Synchronisation der customSearchKeywords erfolgt performant als Bulk-Update (CASE/IN), nicht pro Produktzeile.
+
 #### 2.3 Multi-Select-Filter für `productType`
 - Filter erlaubt mehrere Typen gleichzeitig
 - Optionen werden dynamisch aus der DB geladen
@@ -123,6 +125,7 @@ Die Lösung ist so ausgelegt, dass sie auch bei großen Produktmengen stabil ble
 - Erweiterungsdaten liegen in eigener Tabelle und sind sauber joinbar
 - Keine teuren Runtime-Operationen pro Request außerhalb des Suchindexes
 - Admin-Filteroptionen über Aggregation statt “distinct select” auf großen Tabellen (optional DB-Variante möglich)
+- Updates der `custom_search_keywords` werden als Bulk-Statements ausgeführt (Clear per IN, Set per CASE), um DB-Roundtrips zu minimieren.
 
 ---
 
@@ -156,6 +159,8 @@ ddev exec bin/console dal:refresh:index
 ddev exec bin/console es:index
 ddev exec bin/console es:admin:index
 ```
+
+**Hinweis:** Nach Änderungen am Mapping/Decorator ist ein Reindex erforderlich, damit wbmProductType zuverlässig im Index verfügbar ist.
 
 ---
 

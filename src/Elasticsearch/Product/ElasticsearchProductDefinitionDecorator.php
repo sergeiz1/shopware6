@@ -7,8 +7,6 @@ namespace Wbm\ProductTypeFilter\Elasticsearch\Product;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use OpenSearchDSL\BuilderInterface;
-use OpenSearchDSL\Query\Compound\BoolQuery;
-use OpenSearchDSL\Query\TermLevel\TermQuery;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -21,10 +19,13 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
     private const TABLE_EXTENSION = 'wbm_product_type_extension';
     private const ES_FIELD_PRODUCT_TYPE = 'wbmProductType';
 
+    private string $liveVersionBytes;
+
     public function __construct(
         private readonly AbstractElasticsearchDefinition $inner,
         private readonly Connection $connection
     ) {
+        $this->liveVersionBytes = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
     }
 
     public function getEntityDefinition(): EntityDefinition
@@ -48,74 +49,64 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
             return $data;
         }
 
-        $productIdsBytes = $this->normalizeToBytesList($ids);
-        if ($productIdsBytes === []) {
+        $productIdsBinary = $this->normalizeToBinaryList($ids);
+        if ($productIdsBinary === []) {
             return $data;
         }
 
-        $liveVersionBytes = Uuid::fromHexToBytes(Defaults::LIVE_VERSION);
-
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(product_id)) AS product_id_hex, product_type
-             FROM `' . self::TABLE_EXTENSION . '`
-             WHERE product_id IN (:ids)
-               AND product_version_id = :liveVersion',
+            'SELECT p.id AS doc_id,
+                    ext.product_type
+            FROM product p
+            LEFT JOIN `' . self::TABLE_EXTENSION . '` ext
+              ON ext.product_id = COALESCE(p.parent_id, p.id)
+             AND ext.product_version_id = :liveVersion
+            WHERE p.id IN (:ids)
+              AND p.version_id = :liveVersion',
             [
-                'ids' => $productIdsBytes,
-                'liveVersion' => $liveVersionBytes,
+                'ids' => $productIdsBinary,
+                'liveVersion' => $this->liveVersionBytes,
             ],
             [
                 'ids' => ArrayParameterType::BINARY,
             ]
         );
 
-        /** @var array<string, string> $typeByProductIdHex */
-        $typeByProductIdHex = [];
+        /** @var array<string, string> $typeByProductIdBinary */
+        $typeByProductIdBinary = [];
         foreach ($rows as $row) {
-            $productIdHex = strtolower((string) ($row['product_id_hex'] ?? ''));
+            $productIdBinary = $row['doc_id'] ?? null;
+            if (!is_string($productIdBinary) || $productIdBinary === '' || strlen($productIdBinary) !== 16) {
+                continue;
+            }
+
             $type = trim((string) ($row['product_type'] ?? ''));
-
-            if ($productIdHex === '' || $type === '') {
-                continue;
-            }
-
-            $typeByProductIdHex[$productIdHex] = $type;
-        }
-
-        foreach ($data as $id => &$doc) {
-            $productIdHex = $this->normalizeToHex((string) $id);
-            if ($productIdHex === null) {
-                continue;
-            }
-
-            $type = $typeByProductIdHex[$productIdHex] ?? '';
             if ($type === '') {
                 continue;
             }
 
-            $doc[self::ES_FIELD_PRODUCT_TYPE] = $type;
+            $typeByProductIdBinary[$productIdBinary] = $type;
+        }
 
-            if (!isset($doc['customSearchKeywords']) || !is_array($doc['customSearchKeywords'])) {
-                $doc['customSearchKeywords'] = [];
-            }
+        if ($typeByProductIdBinary === []) {
+            return $data;
+        }
 
-            foreach ($doc['customSearchKeywords'] as $languageId => $keywords) {
-                if (is_array($keywords)) {
-                    $list = array_values(array_filter(array_map('trim', $keywords), static fn ($v) => $v !== ''));
-
-                    // Case-insensitive dupe protection
-                    $lower = array_map(static fn (string $v) => mb_strtolower($v), $list);
-                    if (!in_array(mb_strtolower($type), $lower, true)) {
-                        $list[] = $type;
-                    }
-
-                    $doc['customSearchKeywords'][$languageId] = $list;
+        foreach ($data as $id => &$doc) {
+            if (!is_string($id) || strlen($id) !== 16) {
+                $hex = strtolower(str_replace('-', '', (string) $id));
+                if (strlen($hex) !== 32) {
                     continue;
                 }
-
-                // Fallback for legacy/string formats
-                $doc['customSearchKeywords'][$languageId] = trim((string) $keywords . ' ' . $type);
+                $id = Uuid::fromHexToBytes($hex);
             }
+
+            $type = $typeByProductIdBinary[$id] ?? null;
+            if ($type === null) {
+                continue;
+            }
+
+            $doc[self::ES_FIELD_PRODUCT_TYPE] = $type;
         }
         unset($doc);
 
@@ -124,26 +115,14 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
 
     public function buildTermQuery(Context $context, Criteria $criteria): BuilderInterface
     {
-        $query = $this->inner->buildTermQuery($context, $criteria);
-
-        $term = trim((string) $criteria->getTerm());
-        if ($term === '') {
-            return $query;
-        }
-
-        // TermQuery on keyword field is exact match (case-sensitive depending on mapping/normalizer).
-        if ($query instanceof BoolQuery) {
-            $query->add(new TermQuery(self::ES_FIELD_PRODUCT_TYPE, $term), BoolQuery::SHOULD);
-        }
-
-        return $query;
+        return $this->inner->buildTermQuery($context, $criteria);
     }
 
     /**
      * @param array<int, mixed> $ids
      * @return list<string> binary(16) ids
      */
-    private function normalizeToBytesList(array $ids): array
+    private function normalizeToBinaryList(array $ids): array
     {
         $bytes = [];
 
@@ -164,19 +143,5 @@ class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefin
         }
 
         return $bytes;
-    }
-
-    private function normalizeToHex(string $id): ?string
-    {
-        if (strlen($id) === 16) {
-            return strtolower(Uuid::fromBytesToHex($id));
-        }
-
-        $hex = strtolower(str_replace('-', '', $id));
-        if (strlen($hex) === 32) {
-            return $hex;
-        }
-
-        return null;
     }
 }
