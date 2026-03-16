@@ -5,27 +5,27 @@ Shopware.Component.override('sw-product-detail-specifications', {
     template,
 
     computed: {
-        wbmExtension() {
-            this.ensureWbmExtension();
-            return this.product.extensions.wbmProductTypeExtension;
+        extension() {
+            this.ensureExtension();
+            return this.product.extensions.productTypeExtension;
         }
     },
 
     created() {
-        this.ensureWbmExtension();
+        this.ensureExtension();
     },
 
     watch: {
         product: {
             handler() {
-                this.ensureWbmExtension();
+                this.ensureExtension();
             },
             immediate: true
         }
     },
 
     methods: {
-        ensureWbmExtension() {
+        ensureExtension() {
             if (!this.product) {
                 return;
             }
@@ -34,8 +34,8 @@ Shopware.Component.override('sw-product-detail-specifications', {
                 this.product.extensions = {};
             }
 
-            if (!this.product.extensions.wbmProductTypeExtension) {
-                this.product.extensions.wbmProductTypeExtension = {
+            if (!this.product.extensions.productTypeExtension) {
+                this.product.extensions.productTypeExtension = {
                     productType: '',
                     productIdFromApi: null,
                 };

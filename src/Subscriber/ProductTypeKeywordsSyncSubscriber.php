@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SZ\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeExtension\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;

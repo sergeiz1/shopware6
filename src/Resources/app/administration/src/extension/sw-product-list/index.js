@@ -9,8 +9,8 @@ Shopware.Component.override('sw-product-list', {
     data() {
         return {
             productTypeExtensionRepository: null,
-            wbmProductTypeOptions: [],
-            wbmSelectedProductTypes: [],
+            productTypeOptions: [],
+            selectedProductTypes: [],
         };
     },
 
@@ -36,8 +36,8 @@ Shopware.Component.override('sw-product-list', {
                     placeholder: this.$tc('sw-product.filter.placeholder'),
                     valueProperty: 'id',
                     labelProperty: 'name',
-                    options: this.wbmProductTypeOptions,
-                    loading: this.wbmProductTypeLoading,
+                    options: this.productTypeOptions,
+                    loading: this.productTypeLoading,
                 }
             };
         },
@@ -49,7 +49,7 @@ Shopware.Component.override('sw-product-list', {
         }
 
         this.productTypeExtensionRepository = this.repositoryFactory.create('product_type_extension');
-        this.wbmLoadProductTypes();
+        this.loadProductTypes();
     },
 
     methods: {
@@ -72,7 +72,7 @@ Shopware.Component.override('sw-product-list', {
 
         getListCriteria() {
             const criteria = this.$super('getListCriteria');
-            criteria.addAssociation('wbmProductTypeExtension');
+            criteria.addAssociation('productTypeExtension');
 
             return criteria;
         },
@@ -92,10 +92,10 @@ Shopware.Component.override('sw-product-list', {
                     .sort()
                     .map(type => ({ id: type, name: type }));
 
-                this.wbmProductTypeOptions.splice(0, this.wbmProductTypeOptions.length, ...newOptions);
+                this.productTypeOptions.splice(0, this.productTypeOptions.length, ...newOptions);
             } catch (e) {
-                console.error('WbmProductTypeFilter: loadProductTypes failed', e);
-                this.wbmProductTypeOptions = [];
+                console.error('ProductTypeFilter: loadProductTypes failed', e);
+                this.productTypeOptions = [];
             }
         },
     },

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SZ\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeExtension\Subscriber;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Plugin\Event\PluginPostActivateEvent;
@@ -38,7 +38,7 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
     public function reindex(object $event = null): void
     {
         $eventClass = $event !== null ? $event::class : 'unknown';
-        $this->logger->info(sprintf('[WBM] Reindex triggered (plugin lifecycle, event=%s).', $eventClass));
+        $this->logger->info(sprintf('Reindex triggered (plugin lifecycle, event=%s).', $eventClass));
 
         $isHard = $event instanceof PluginPostInstallEvent || $event instanceof PluginPostActivateEvent;
 

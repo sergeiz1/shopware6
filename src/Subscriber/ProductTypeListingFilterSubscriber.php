@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SZ\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeExtension\Subscriber;
 
 use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
