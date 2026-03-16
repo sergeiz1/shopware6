@@ -8,26 +8,26 @@
         <defaults autowire="true" autoconfigure="true" public="false" />
 
         <prototype
-            namespace="Wbm\ProductTypeFilter\"
+            namespace="SZ\ProductTypeExtension\"
             resource="../../*"
             exclude="../../{DependencyInjection,Resources,Tests,Kernel.php}" />
 
         <service
-            id="Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension\ProductTypeExtensionDefinition">
+            id="SZ\ProductTypeExtension\Core\Content\ProductTypeExtension\ProductTypeExtensionDefinition">
             <tag name="shopware.entity.definition" entity="wbm_product_type_extension" />
         </service>
 
-        <service id="Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension\ProductExtension">
+        <service id="SZ\ProductTypeExtension\Core\Content\ProductTypeExtension\ProductExtension">
             <tag name="shopware.entity.extension" />
         </service>
 
-        <service id="Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension\SalesChannelProductExtension">
+        <service id="SZ\ProductTypeExtension\Core\Content\ProductTypeExtension\SalesChannelProductExtension">
             <tag name="shopware.entity.extension" />
         </service>
 
-        <service id="Wbm\ProductTypeFilter\Elasticsearch\Product\ElasticsearchProductDefinitionDecorator"
+        <service id="SZ\ProductTypeExtension\Elasticsearch\Product\ElasticsearchProductDefinitionDecorator"
                  decorates="Shopware\Elasticsearch\Product\ElasticsearchProductDefinition">
-            <argument type="service" id="Wbm\ProductTypeFilter\Elasticsearch\Product\ElasticsearchProductDefinitionDecorator.inner" />
+            <argument type="service" id="SZ\ProductTypeExtension\Elasticsearch\Product\ElasticsearchProductDefinitionDecorator.inner" />
             <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
     </services>

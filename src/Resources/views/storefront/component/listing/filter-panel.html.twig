@@ -3,7 +3,7 @@
 {% block component_filter_panel_items %}
     {{ parent() }}
 
-    {% set productTypesAgg = listing.aggregations.get('wbmProductType') %}
+    {% set productTypesAgg = listing.aggregations.get('productType') %}
     {% set productTypeOptions = [] %}
 
     {% for b in productTypesAgg.buckets %}
@@ -22,7 +22,7 @@
     {% if productTypesAgg and productTypesAgg.buckets|length > 0 %}
         <div class="filter-wrapper">
             {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
-                name: 'wbmProductType',
+                name: 'productType',
                 displayName: 'sw-product.filter.label'|trans|sw_sanitize,
                 elements: productTypeOptions
             } %}

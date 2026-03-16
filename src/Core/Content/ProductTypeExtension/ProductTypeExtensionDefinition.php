@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension;
+namespace SZ\ProductTypeExtension\Core\Content\ProductTypeExtension;
 
 use Shopware\Core\Content\Product\ProductDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -21,7 +21,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class ProductTypeExtensionDefinition extends EntityDefinition
 {
-    private const ENTITY_NAME = 'wbm_product_type_extension';
+    private const ENTITY_NAME = 'sz_product_type_extension';
     private const FIELD_ID = 'id';
     private const FIELD_PRODUCT_ID = 'product_id';
     private const FIELD_PRODUCT_ID_FROM_API = 'product_id_from_api';

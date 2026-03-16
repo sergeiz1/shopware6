@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeFilter\Subscriber;
 
 use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
 {
-    private const FIELD_PRODUCT_TYPE = 'wbmProductType';
+    private const FIELD_PRODUCT_TYPE = 'productType';
 
     public static function getSubscribedEvents(): array
     {

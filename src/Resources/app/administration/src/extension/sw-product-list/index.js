@@ -20,7 +20,7 @@ Shopware.Component.override('sw-product-list', {
 
             return [
                 ...filters,
-                'wbm-product-type-filter',
+                'product-type-filter',
             ];
         },
 
@@ -29,8 +29,8 @@ Shopware.Component.override('sw-product-list', {
 
             return {
                 ...options,
-                'wbm-product-type-filter': {
-                    property: 'wbmProductTypeExtension.productType',
+                'product-type-filter': {
+                    property: 'productTypeExtension.productType',
                     type: 'multi-select-filter',
                     label: this.$tc('sw-product.filter.productType'),
                     placeholder: this.$tc('sw-product.filter.placeholder'),
@@ -44,23 +44,23 @@ Shopware.Component.override('sw-product-list', {
     },
 
     created() {
-         if (Array.isArray(this.defaultFilters) && !this.defaultFilters.includes('wbm-product-type-filter')) {
-            this.defaultFilters.push('wbm-product-type-filter');
+         if (Array.isArray(this.defaultFilters) && !this.defaultFilters.includes('product-type-filter')) {
+            this.defaultFilters.push('product-type-filter');
         }
 
-        this.productTypeExtensionRepository = this.repositoryFactory.create('wbm_product_type_extension');
+        this.productTypeExtensionRepository = this.repositoryFactory.create('product_type_extension');
         this.wbmLoadProductTypes();
     },
 
     methods: {
         getProductColumns() {
             const columns = this.$super('getProductColumns');
-            const exists = columns.some(col => col.property === 'wbmProductType');
+            const exists = columns.some(col => col.property === 'productType');
 
             if (!exists) {
                 columns.push({
-                    property: 'wbmProductType',
-                    dataIndex: 'wbmProductTypeExtension.productType',
+                    property: 'productType',
+                    dataIndex: 'productTypeExtension.productType',
                     label: this.$tc('sw-product.list.columnProductType'),
                     inlineEdit: 'string',
                     allowResize: true,
@@ -77,7 +77,7 @@ Shopware.Component.override('sw-product-list', {
             return criteria;
         },
 
-        async wbmLoadProductTypes() {
+        async loadProductTypes() {
             try {
                 const criteria = new Criteria(1, 500);
                 criteria.addSorting(Criteria.sort('productType', 'ASC', false));

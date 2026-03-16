@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Elasticsearch\Product;
+namespace SZ\ProductTypeExtension\Elasticsearch\Product;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -16,8 +16,8 @@ use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 
 class ElasticsearchProductDefinitionDecorator extends AbstractElasticsearchDefinition
 {
-    private const TABLE_EXTENSION = 'wbm_product_type_extension';
-    private const ES_FIELD_PRODUCT_TYPE = 'wbmProductType';
+    private const TABLE_EXTENSION = 'sz_product_type_extension';
+    private const ES_FIELD_PRODUCT_TYPE = 'productType';
 
     private string $liveVersionBytes;
 

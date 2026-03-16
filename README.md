@@ -1,10 +1,10 @@
-# WbmProductTypeFilter (Shopware 6.7)
+# ProductTypeExtension (Shopware 6.7)
 
 Dieses Plugin erweitert Shopware 6 um zusätzliche Produktdaten aus einer externen Schnittstelle und stellt diese sowohl im **Admin-Backend** als auch im **Storefront** als filter- und suchfähige Information bereit.
 
 ## Kurzüberblick der Lösung
 
-- Erweiterung der Produktdaten über eine eigene Extension-Entity (`wbm_product_type_extension`)
+- Erweiterung der Produktdaten über eine eigene Extension-Entity (`sz_product_type_extension`)
 - Anzeige und Pflege im Admin unter **Produkt > Spezifikationen**
 - Erweiterung der Admin-Produktliste:
   - zusätzliche Spalte `productType`
@@ -33,7 +33,7 @@ Dieses Plugin erweitert Shopware 6 um zusätzliche Produktdaten aus einer extern
 **Technische Entscheidung:**  
 Die Daten werden **nicht als `customFields`** gespeichert, sondern als **eigene DAL-Entity**:
 
-- Entity: `wbm_product_type_extension`
+- Entity: `product_type_extension`
 - Relation: `product (1) -> extension (1)` über `product_id`
 
 **Warum diese Entscheidung:**
@@ -50,7 +50,7 @@ Die Daten werden **nicht als `customFields`** gespeichert, sondern als **eigene 
 Die Produktliste erhält eine zusätzliche Spalte für `productType`.
 
 **Entscheidung:**  
-Die Liste bindet die Association `wbmProductTypeExtension` an und rendert den Wert in einer eigenen Column-Template-Erweiterung.
+Die Liste bindet die Association `productTypeExtension` an und rendert den Wert in einer eigenen Column-Template-Erweiterung.
 
 #### 2.2 Suche im Admin muss `productType` finden
 Wenn der Admin in der Suche z. B. „Bücher“ eingibt, sollen Produkte mit `productType = Bücher` erscheinen.
@@ -102,12 +102,12 @@ Damit findet die Storefront-Suche Treffer, auch wenn das Feld selbst als `keywor
 ## Elasticsearch / OpenSearch: Indexierung & Mapping
 
 ### Ziel
-- `wbmProductType` muss aggregierbar sein (Filter)
+- `productType` muss aggregierbar sein (Filter)
 - Suche muss den Produkttyp finden können
 
 ### Umsetzung
-- Mapping: `wbmProductType` wird als `keyword` gemapped
-- Dokumentanreicherung: Beim Fetch der Dokumentdaten wird `wbmProductType` aus `wbm_product_type_extension` gemerged
+- Mapping: `productType` wird als `keyword` gemapped
+- Dokumentanreicherung: Beim Fetch der Dokumentdaten wird `productType` aus `sz_product_type_extension` gemerged
 - Sucherweiterung: `customSearchKeywords` wird pro Sprache um den Produkttyp ergänzt
 
 **Warum `keyword`:**
@@ -135,7 +135,7 @@ Plugin installieren/aktivieren
 
 ```bash
 ddev exec bin/console plugin:refresh
-ddev exec bin/console plugin:install WbmProductTypeFilter --activate --clearCache
+ddev exec bin/console plugin:install ProductTypeExtension --activate --clearCache
 ```
 
 Damit `es:index` und `es:admin:index` funktionieren, sollten in der `.env.local` folgende Variablen gesetzt sein:
@@ -144,12 +144,12 @@ Damit `es:index` und `es:admin:index` funktionieren, sollten in der `.env.local`
 OPENSEARCH_URL=opensearch:9200
 SHOPWARE_ES_INDEXING_ENABLED=1
 SHOPWARE_ES_ENABLED=1
-SHOPWARE_ES_INDEX_PREFIX=wbm-
+SHOPWARE_ES_INDEX_PREFIX=sz-
 SHOPWARE_ES_THROW_EXCEPTION=1
 ADMIN_OPENSEARCH_URL=opensearch:9200
 SHOPWARE_ADMIN_ES_ENABLED=1
 SHOPWARE_ADMIN_ES_REFRESH_INDICES=1
-SHOPWARE_ADMIN_ES_INDEX_PREFIX=wbm-admin-
+SHOPWARE_ADMIN_ES_INDEX_PREFIX=sz-admin-
 ```
 
 Reindex (wenn notwendig)
@@ -160,7 +160,7 @@ ddev exec bin/console es:index
 ddev exec bin/console es:admin:index
 ```
 
-**Hinweis:** Nach Änderungen am Mapping/Decorator ist ein Reindex erforderlich, damit wbmProductType zuverlässig im Index verfügbar ist.
+**Hinweis:** Nach Änderungen am Mapping/Decorator ist ein Reindex erforderlich, damit productType zuverlässig im Index verfügbar ist.
 
 ---
 
@@ -175,5 +175,5 @@ Im Plugin sind QA vorgesehen:
 
 ### Ein Command für alles (QA)
 ```bash
-ddev exec bash -lc "cd custom/plugins/WbmProductTypeFilter && composer qa"
+ddev exec bash -lc "cd custom/plugins/SZProductTypeExtension && composer qa"
 ```

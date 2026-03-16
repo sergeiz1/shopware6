@@ -1,8 +1,8 @@
 {% block sw_product_list_grid_columns %}
     {% parent %}
 
-    <template #column-wbmProductType="{ item }">
-        {{ item.extensions?.wbmProductTypeExtension?.productType || '-' }}
+    <template #column-productType="{ item }">
+        {{ item.extensions?.productTypeExtension?.productType || '-' }}
     </template>
 {% endblock %}
 

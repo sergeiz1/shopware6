@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Migration;
+namespace SZ\ProductTypeExtension\Migration;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Migration\MigrationStep;
 
-class Migration1769025113CreateWbmProductTypeExtensionTable extends MigrationStep
+class Migration1769025113CreateProductTypeExtensionTable extends MigrationStep
 {
     public function getCreationTimestamp(): int
     {
@@ -17,7 +17,7 @@ class Migration1769025113CreateWbmProductTypeExtensionTable extends MigrationSte
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
-            CREATE TABLE IF NOT EXISTS `wbm_product_type_extension` (
+            CREATE TABLE IF NOT EXISTS `sz_product_type_extension` (
                 `id` BINARY(16) NOT NULL,
                 `product_id` BINARY(16) NOT NULL,
                 `product_version_id` BINARY(16) NOT NULL,
@@ -27,10 +27,10 @@ class Migration1769025113CreateWbmProductTypeExtensionTable extends MigrationSte
                 `updated_at` DATETIME(3) NULL,
     
                 PRIMARY KEY (`id`),
-                UNIQUE KEY `uniq.wbm_product_type_extension.product_id_version_id` (`product_id`, `product_version_id`),
-                INDEX `idx.wbm_product_type_extension.product_type` (`product_type`),
+                UNIQUE KEY `uniq.sz_product_type_extension.product_id_version_id` (`product_id`, `product_version_id`),
+                INDEX `idx.sz_product_type_extension.product_type` (`product_type`),
 
-                CONSTRAINT `fk.wbm_product_type_extension.product`
+                CONSTRAINT `fk.sz_product_type_extension.product`
                     FOREIGN KEY (`product_id`, `product_version_id`) 
                     REFERENCES `product` (`id`, `version_id`)
                     ON DELETE CASCADE

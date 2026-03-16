@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter;
+namespace SZ\ProductTypeExtension;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Defaults;
@@ -11,9 +11,9 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Uuid\Uuid;
 
-class WbmProductTypeFilter extends Plugin
+class ProductTypeExtension extends Plugin
 {
-    private const TABLE_NAME = 'wbm_product_type_extension';
+    private const TABLE_NAME = 'sz_product_type_extension';
     private const DEMO_TYPES = [
         'Bücher',
         'CD-ROMs',

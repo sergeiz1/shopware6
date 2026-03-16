@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeFilter\Subscriber;
 
 use Psr\Log\LoggerInterface;
 use Shopware\Core\Framework\Plugin\Event\PluginPostActivateEvent;
@@ -51,7 +51,7 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
         $this->runCommand('es:index', ['--no-interaction' => true]);
         $this->runCommand('es:admin:index', ['--no-interaction' => true]);
 
-        $this->logger->info('[WBM] Reindex finished.');
+        $this->logger->info('Reindex finished.');
     }
 
     /**
@@ -62,19 +62,19 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
         $app = $this->getApplication();
 
         if (!$app->has($commandName)) {
-            $this->logger->warning(sprintf('[WBM] Command not found: %s (skipping)', $commandName));
+            $this->logger->warning(sprintf('Command not found: %s (skipping)', $commandName));
             return;
         }
 
         $input = new ArrayInput(array_merge(['command' => $commandName], $options));
         $output = new BufferedOutput();
 
-        $this->logger->info(sprintf('[WBM] Running command: %s', $commandName));
+        $this->logger->info(sprintf('Running command: %s', $commandName));
 
         try {
             $exitCode = $app->run($input, $output);
         } catch (Throwable $e) {
-            $this->logger->error(sprintf('[WBM] Command threw exception: %s', $commandName), [
+            $this->logger->error(sprintf('Command threw exception: %s', $commandName), [
                 'exception' => $e,
             ]);
             return;
@@ -83,15 +83,15 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
         $buffer = trim($output->fetch());
         if ($buffer !== '') {
             $snippet = mb_substr($buffer, 0, 4000);
-            $this->logger->info(sprintf('[WBM] Output %s: %s', $commandName, $snippet));
+            $this->logger->info(sprintf('Output %s: %s', $commandName, $snippet));
         }
 
         if ($exitCode !== 0) {
-            $this->logger->error(sprintf('[WBM] Command failed (%s) exitCode=%d', $commandName, $exitCode));
+            $this->logger->error(sprintf('Command failed (%s) exitCode=%d', $commandName, $exitCode));
             return;
         }
 
-        $this->logger->info(sprintf('[WBM] Command OK: %s', $commandName));
+        $this->logger->info(sprintf('Command OK: %s', $commandName));
     }
 
     private function getApplication(): Application

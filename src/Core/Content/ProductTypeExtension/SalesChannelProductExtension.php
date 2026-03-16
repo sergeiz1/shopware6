@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension;
+namespace SZ\ProductTypeExtension\Core\Content\ProductTypeExtension;
 
 use Shopware\Core\Content\Product\SalesChannel\SalesChannelProductDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
@@ -11,7 +11,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class SalesChannelProductExtension extends EntityExtension
 {
-    private const ASSOCIATION_PRODUCT_TYPE_EXTENSION  = 'wbmProductTypeExtension';
+    private const ASSOCIATION_PRODUCT_TYPE_EXTENSION  = 'productTypeExtension';
     private const LOCAL_FIELD_PRODUCT_ID = 'id';
     private const REFERENCE_FIELD_PRODUCT_ID = 'product_id';
 

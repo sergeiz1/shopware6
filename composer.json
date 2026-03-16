@@ -1,6 +1,6 @@
 {
-    "name": "wbm/product-type-filter",
-    "description": "wbm/product-type-filter",
+    "name": "sz/product-type-extension",
+    "description": "sz/product-type-extension",
     "type": "shopware-platform-plugin",
     "version": "1.0.0",
     "license": "MIT",
@@ -33,20 +33,20 @@
         ]
     },
     "extra": {
-        "shopware-plugin-class": "Wbm\\ProductTypeFilter\\WbmProductTypeFilter",
+        "shopware-plugin-class": "SZ\\ProductTypeExtension\\ProductTypeExtension",
         "label": {
-            "de-DE": "Wbm Produkttyp Filter",
-            "en-GB": "Wbm Product Type Filter"
+            "de-DE": "Produkttyp Extension",
+            "en-GB": "Product Type Extension"
         }
     },
     "autoload": {
         "psr-4": {
-            "Wbm\\ProductTypeFilter\\": "src/"
+            "SZ\\ProductTypeExtension\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Wbm\\ProductTypeFilter\\Tests\\": "tests/"
+            "SZ\\ProductTypeExtension\\Tests\\": "tests/"
         }
     },
     "config": {

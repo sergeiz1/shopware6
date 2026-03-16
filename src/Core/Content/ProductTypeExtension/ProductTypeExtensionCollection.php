@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Core\Content\ProductTypeExtension;
+namespace SZ\ProductTypeExtension\Core\Content\ProductTypeExtension;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 

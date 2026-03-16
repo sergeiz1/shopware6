@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Wbm\ProductTypeFilter\Subscriber;
+namespace SZ\ProductTypeFilter\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ProductTypeKeywordsSyncSubscriber implements EventSubscriberInterface
 {
-    private const TABLE_EXTENSION = 'wbm_product_type_extension';
+    private const TABLE_EXTENSION = 'sz_product_type_extension';
 
     private string $liveVersionBytes;
 
@@ -26,7 +26,7 @@ class ProductTypeKeywordsSyncSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'wbm_product_type_extension.written' => 'onProductTypeWritten',
+            'sz_product_type_extension.written' => 'onProductTypeWritten',
         ];
     }
 
@@ -105,7 +105,6 @@ class ProductTypeKeywordsSyncSubscriber implements EventSubscriberInterface
             $setMap[$productId] = $keywordsJson;
         }
 
-        // Bulk clear
         if ($clearIds !== []) {
             $this->connection->executeStatement(
                 'UPDATE product_translation
