@@ -48,7 +48,7 @@ Shopware.Component.override('sw-product-list', {
             this.defaultFilters.push('product-type-filter');
         }
 
-        this.productTypeExtensionRepository = this.repositoryFactory.create('product_type_extension');
+        this.productTypeExtensionRepository = this.repositoryFactory.create('sz_product_type_extension');
         this.loadProductTypes();
     },
 

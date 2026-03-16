@@ -14,7 +14,7 @@
 
         <service
             id="SZ\ProductTypeExtension\Core\Content\ProductTypeExtension\ProductTypeExtensionDefinition">
-            <tag name="shopware.entity.definition" entity="wbm_product_type_extension" />
+            <tag name="shopware.entity.definition" entity="sz_product_type_extension" />
         </service>
 
         <service id="SZ\ProductTypeExtension\Core\Content\ProductTypeExtension\ProductExtension">
