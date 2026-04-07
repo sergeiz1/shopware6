@@ -4,7 +4,7 @@ Dieses Plugin erweitert Shopware 6 um zusätzliche Produktdaten aus einer extern
 
 ## Kurzüberblick der Lösung
 
-- Erweiterung der Produktdaten über eine eigene Extension-Entity (`sz_product_type_extension`)
+- Erweiterung der Produktdaten über eine eigene DAL-Entity mit der Tabelle `sz_product_type_extension`
 - Anzeige und Pflege im Admin unter **Produkt > Spezifikationen**
 - Erweiterung der Admin-Produktliste:
   - zusätzliche Spalte `productType`
@@ -13,7 +13,7 @@ Dieses Plugin erweitert Shopware 6 um zusätzliche Produktdaten aus einer extern
 - Erweiterung des Storefront-Listings:
   - Multi-Select-Filter `productType`
   - Optionen dynamisch über Aggregation (Elasticsearch/OpenSearch)
-- Bonus: `productType` wird in der Storefront-Suche berücksichtigt
+- `productType` wird in der Storefront-Suche berücksichtigt
 
 ---
 
@@ -33,8 +33,7 @@ Dieses Plugin erweitert Shopware 6 um zusätzliche Produktdaten aus einer extern
 **Technische Entscheidung:**  
 Die Daten werden **nicht als `customFields`** gespeichert, sondern als **eigene DAL-Entity**:
 
-- Entity: `product_type_extension`
-- Relation: `product (1) -> extension (1)` über `product_id`
+- Eigene DAL-Entity mit 1:1-Relation zum Produkt über `product_id`
 
 **Warum diese Entscheidung:**
 - sauberer, typisierter Datenlayer (DAL) statt “freies” Schema
@@ -50,24 +49,24 @@ Die Daten werden **nicht als `customFields`** gespeichert, sondern als **eigene 
 Die Produktliste erhält eine zusätzliche Spalte für `productType`.
 
 **Entscheidung:**  
-Die Liste bindet die Association `productTypeExtension` an und rendert den Wert in einer eigenen Column-Template-Erweiterung.
+Die Liste bindet die Association `productTypeExtension` an und rendert den Wert über eine Erweiterung des Column-Templates.
 
 #### 2.2 Suche im Admin muss `productType` finden
 Wenn der Admin in der Suche z. B. „Bücher“ eingibt, sollen Produkte mit `productType = Bücher` erscheinen.
 
 **Entscheidung:**  
-`productType` wird beim ES/OS Index-Build zusätzlich in `customSearchKeywords` angereichert (Index-optimiert), damit die bestehende Suchlogik der Produktliste den Wert zuverlässig berücksichtigt.
+`productType` wird für die Admin-Suche indexfreundlich über `customSearchKeywords` berücksichtigt, damit die bestehende Suchlogik zuverlässig Treffer liefern kann.
 
 Umsetzungshinweis: Die Synchronisation der customSearchKeywords erfolgt performant als Bulk-Update (CASE/IN), nicht pro Produktzeile.
 
 #### 2.3 Multi-Select-Filter für `productType`
 - Filter erlaubt mehrere Typen gleichzeitig
-- Optionen werden dynamisch aus der DB geladen
+- Optionen werden dynamisch aus den vorhandenen `productType`-Werten erzeugt
 
 **Entscheidung:**  
-Die Filteroptionen werden aus der Extension-Entity per Aggregation erzeugt:
+Die Filteroptionen werden dynamisch per Aggregation aus den vorhandenen `productType`-Werten erzeugt:
 - `Criteria.terms('types', 'productType')`
-- daraus werden Options `{ id: type, name: type }` gebaut
+- daraus werden Optionen im Format `{ id: type, name: type }` gebaut
 
 **Warum:**  
 - keine Hardcoded Werte
@@ -102,8 +101,7 @@ Damit findet die Storefront-Suche Treffer, auch wenn das Feld selbst als `keywor
 ## Elasticsearch / OpenSearch: Indexierung & Mapping
 
 ### Ziel
-- `productType` muss aggregierbar sein (Filter)
-- Suche muss den Produkttyp finden können
+- `productType` wird im Suchindex als eigenes aggregierbares Feld geführt und zusätzlich in `customSearchKeywords` aufgenommen, damit sowohl Filterung als auch Suchtreffer zuverlässig funktionieren.
 
 ### Umsetzung
 - Mapping: `productType` wird als `keyword` gemapped
@@ -124,14 +122,16 @@ Die Lösung ist so ausgelegt, dass sie auch bei großen Produktmengen stabil ble
 - `keyword` Mapping für schnelle Terms-Aggregations/Filters
 - Erweiterungsdaten liegen in eigener Tabelle und sind sauber joinbar
 - Keine teuren Runtime-Operationen pro Request außerhalb des Suchindexes
-- Admin-Filteroptionen über Aggregation statt “distinct select” auf großen Tabellen (optional DB-Variante möglich)
+- Admin-Filteroptionen werden über Aggregation statt über `DISTINCT`-Abfragen auf großen Tabellen erzeugt.
 - Updates der `custom_search_keywords` werden als Bulk-Statements ausgeführt (Clear per IN, Set per CASE), um DB-Roundtrips zu minimieren.
 
 ---
 
 ## Installation & Reindex
 
-Plugin installieren/aktivieren
+Plugin installieren/aktivieren:
+
+Das Plugin-Verzeichnis lautet `custom/plugins/SZProductTypeExtension`, der in Shopware registrierte Plugin-Name ist `ProductTypeExtension`.
 
 ```bash
 ddev exec bin/console plugin:refresh
@@ -152,7 +152,7 @@ SHOPWARE_ADMIN_ES_REFRESH_INDICES=1
 SHOPWARE_ADMIN_ES_INDEX_PREFIX=sz-admin-
 ```
 
-Reindex (wenn notwendig)
+Reindex bei Änderungen am Mapping, an Suchfeldern oder an der Dokumentanreicherung
 
 ```bash
 ddev exec bin/console dal:refresh:index
@@ -160,13 +160,13 @@ ddev exec bin/console es:index
 ddev exec bin/console es:admin:index
 ```
 
-**Hinweis:** Nach Änderungen am Mapping/Decorator ist ein Reindex erforderlich, damit productType zuverlässig im Index verfügbar ist.
+**Hinweis:** Nach Änderungen am Mapping/Decorator ist ein Reindex erforderlich, damit `productType` zuverlässig im Index verfügbar ist.
 
 ---
 
 ## QA
 
-Im Plugin sind QA vorgesehen:
+Im Plugin sind QA vorgesehen. Der QA-Command wird im Plugin-Verzeichnis ausgeführt.
 
 - PHP-CS-Fixer (Code Style)
 - PHPStan (Static Analysis)
