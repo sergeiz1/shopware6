@@ -90,7 +90,7 @@ Die Optionen werden dynamisch über eine **TermsAggregation** erzeugt.
 
 ---
 
-### 4) Bonus: Storefront-Suche berücksichtigt `productType`
+### 4) Storefront-Suche berücksichtigt `productType`
 
 **Entscheidung:**  
 Für zuverlässige Suchtreffer wird `productType` im Index als eigenes Feld geführt und zusätzlich in `customSearchKeywords` angehängt.
