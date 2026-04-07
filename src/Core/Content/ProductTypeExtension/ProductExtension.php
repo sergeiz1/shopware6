@@ -23,7 +23,7 @@ class ProductExtension extends EntityExtension
                 self::LOCAL_FIELD_PRODUCT_ID,
                 self::REFERENCE_FIELD_PRODUCT_ID,
                 ProductTypeExtensionDefinition::class,
-                true
+                false
             )
         );
     }
