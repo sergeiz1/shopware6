@@ -35,6 +35,9 @@ final class PluginLifecycleSubscriber implements EventSubscriberInterface
             new ReindexProductTypeMessage(hardSync: $isHard)
         );
 
-        $this->logger->info('Reindex message dispatched.');
+        $this->logger->info('Reindex message dispatched.', [
+            'event' => get_class($event),
+            'hardSync' => $isHard,
+        ]);
     }
 }

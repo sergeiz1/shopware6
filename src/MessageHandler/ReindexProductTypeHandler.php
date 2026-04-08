@@ -27,6 +27,10 @@ final class ReindexProductTypeHandler
 
     public function __invoke(ReindexProductTypeMessage $message): void
     {
+        $this->logger->info('ReindexProductTypeHandler started.', [
+            'hardSync' => $message->hardSync,
+        ]);
+
         if ($message->hardSync) {
             $this->syncService->syncAll();
         }
@@ -34,6 +38,8 @@ final class ReindexProductTypeHandler
         $this->runCommand('dal:refresh:index');
         $this->runCommand('es:index');
         $this->runCommand('es:admin:index');
+
+        $this->logger->info('ReindexProductTypeHandler finished.');
     }
 
     /**

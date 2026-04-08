@@ -10,7 +10,7 @@ Shopware.Component.override('sw-product-list', {
         return {
             productTypeExtensionRepository: null,
             productTypeOptions: [],
-            selectedProductTypes: [],
+            productTypeLoading: false,
         };
     },
 
@@ -44,7 +44,7 @@ Shopware.Component.override('sw-product-list', {
     },
 
     created() {
-         if (Array.isArray(this.defaultFilters) && !this.defaultFilters.includes('product-type-filter')) {
+        if (Array.isArray(this.defaultFilters) && !this.defaultFilters.includes('product-type-filter')) {
             this.defaultFilters.push('product-type-filter');
         }
 
@@ -78,9 +78,10 @@ Shopware.Component.override('sw-product-list', {
         },
 
         async loadProductTypes() {
+            this.productTypeLoading = true;
+
             try {
                 const criteria = new Criteria(1, 500);
-                criteria.addSorting(Criteria.sort('productType', 'ASC', false));
                 criteria.addAggregation(Criteria.terms('types', 'productType'));
 
                 const result = await this.productTypeExtensionRepository.search(criteria, Shopware.Context.api);
@@ -96,6 +97,8 @@ Shopware.Component.override('sw-product-list', {
             } catch (e) {
                 console.error('ProductTypeFilter: loadProductTypes failed', e);
                 this.productTypeOptions = [];
+            } finally {
+                this.productTypeLoading = false;
             }
         },
     },

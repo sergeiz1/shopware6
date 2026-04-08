@@ -1,13 +1,12 @@
 import template from './sw-product-detail-specifications.html.twig';
-import './sw-product-detail.specifications.scss';
+import './sw-product-detail-specifications.scss';
 
 Shopware.Component.override('sw-product-detail-specifications', {
     template,
 
     computed: {
         extension() {
-            this.ensureExtension();
-            return this.product.extensions.productTypeExtension;
+            return this.product?.extensions?.productTypeExtension ?? null;
         }
     },
 

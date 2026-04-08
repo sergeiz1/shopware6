@@ -22,7 +22,7 @@ class Migration1769025113CreateProductTypeExtensionTable extends MigrationStep
                 `product_id` BINARY(16) NOT NULL,
                 `product_version_id` BINARY(16) NOT NULL,
                 `product_id_from_api` INT NOT NULL,
-                `product_type` VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                `product_type` VARCHAR(255) COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
                 `created_at` DATETIME(3) NOT NULL,
                 `updated_at` DATETIME(3) NULL,
     

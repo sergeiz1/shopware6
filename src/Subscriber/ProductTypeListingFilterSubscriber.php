@@ -10,7 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\Terms
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
+final class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
 {
     private const FIELD_PRODUCT_TYPE = 'productType';
 
@@ -23,25 +23,23 @@ class ProductTypeListingFilterSubscriber implements EventSubscriberInterface
 
     public function addFilter(ProductListingCollectFilterEvent $event): void
     {
-        $filters = $event->getFilters();
         $request = $event->getRequest();
 
-        $selectedTypes = $event->getRequest()->get(self::FIELD_PRODUCT_TYPE, []);
+        $selectedTypes = $request->get(self::FIELD_PRODUCT_TYPE, []);
         if (!is_array($selectedTypes)) {
             $selectedTypes = [$selectedTypes];
         }
-        $selectedTypes = array_values(array_filter(array_map('strval', $selectedTypes)));
 
-        $isFiltered = \count($selectedTypes) > 0;
+        $selectedTypes = array_values(array_filter(array_map('strval', $selectedTypes)));
 
         $filter = new Filter(
             self::FIELD_PRODUCT_TYPE,
-            $isFiltered,
+            \count($selectedTypes) > 0,
             [new TermsAggregation(self::FIELD_PRODUCT_TYPE, self::FIELD_PRODUCT_TYPE)],
             new EqualsAnyFilter(self::FIELD_PRODUCT_TYPE, $selectedTypes),
             $selectedTypes
         );
 
-        $filters->add($filter);
+        $event->getFilters()->add($filter);
     }
 }
